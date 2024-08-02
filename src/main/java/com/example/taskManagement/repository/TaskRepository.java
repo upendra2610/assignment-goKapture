@@ -1,6 +1,8 @@
 package com.example.taskManagement.repository;
 
 import com.example.taskManagement.models.Task;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +19,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     void deleteById(Long id);
 
     @Query(value = "SELECT * FROM task t WHERE t.title LIKE %:keyword% OR t.description LIKE %:keyword%", nativeQuery = true)
-    List<Task> searchByTitleOrDescription(@Param("keyword") String keyword);
+    Page<Task> searchByTitleOrDescription(String keyword, Pageable pageable);
 
     @Query(value = "SELECT * FROM task t WHERE " +
             "(:status IS NULL OR t.status = :status) AND " +

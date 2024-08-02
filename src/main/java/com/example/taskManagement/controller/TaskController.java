@@ -2,9 +2,11 @@ package com.example.taskManagement.controller;
 
 import com.example.taskManagement.dtos.CreateTaskRequestDto;
 import com.example.taskManagement.dtos.FilterRequestDto;
+import com.example.taskManagement.dtos.SearchRequestDto;
 import com.example.taskManagement.exceptions.NotFoundException;
 import com.example.taskManagement.models.Task;
 import com.example.taskManagement.services.TaskService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +59,10 @@ public class TaskController {
                 filterRequestDto.getDue_date()), HttpStatus.OK);
     }
 
-    @GetMapping("/search/{keyword}")
-    public ResponseEntity<List<Task>> searchTasks(@PathVariable String keyword) throws NotFoundException {
-        return new ResponseEntity<>(taskService.searchTasks(keyword), HttpStatus.OK);
+    @GetMapping("/search")
+    public Page<Task> searchTasks(@RequestBody SearchRequestDto searchRequestDto) throws NotFoundException {
+        return taskService.searchTasks(searchRequestDto.getQuery(),
+                searchRequestDto.getPageNumber(),
+                searchRequestDto.getPageSize());
     }
 }

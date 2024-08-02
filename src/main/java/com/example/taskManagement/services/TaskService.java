@@ -3,7 +3,9 @@ package com.example.taskManagement.services;
 import com.example.taskManagement.exceptions.NotFoundException;
 import com.example.taskManagement.models.Task;
 import com.example.taskManagement.repository.TaskRepository;
-import com.example.taskManagement.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,11 +16,9 @@ import java.util.Optional;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository){
+    public TaskService(TaskRepository taskRepository){
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
     }
 
     public List<Task> getAllTasks() throws NotFoundException {
@@ -73,8 +73,10 @@ public class TaskService {
 
     }
 
-    public List<Task> searchTasks(String keyword) throws NotFoundException {
-        List<Task> response = taskRepository.searchByTitleOrDescription(keyword);
+    public Page<Task> searchTasks(String query, int pageNumber, int pageSize) throws NotFoundException {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+
+        Page<Task> response = taskRepository.searchByTitleOrDescription(query, pageable);
         if(!response.isEmpty()){
             return response;
         }
