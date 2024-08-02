@@ -14,7 +14,7 @@ public class Task extends BaseModal{
     private String description;
     private String status;
     private String priority;
-    private LocalDate dueDate;
+    private LocalDate due_date;
     private LocalDate createdAt;
     private LocalDate updatedAt;
     @ManyToOne(cascade = {CascadeType.PERSIST})

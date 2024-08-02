@@ -2,7 +2,6 @@ package com.example.taskManagement.services;
 
 import com.example.taskManagement.exceptions.NotFoundException;
 import com.example.taskManagement.models.Task;
-import com.example.taskManagement.models.User;
 import com.example.taskManagement.repository.TaskRepository;
 import com.example.taskManagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class TaskService {
             task.setDescription(description);
             task.setStatus(status);
             task.setPriority(priority);
-            task.setDueDate(dueDate);
+            task.setDue_date(dueDate);
             return taskRepository.save(task);
 
     }
@@ -52,7 +51,7 @@ public class TaskService {
             task.setDescription(description);
             task.setStatus(status);
             task.setPriority(priority);
-            task.setDueDate(dueDate);
+            task.setDue_date(dueDate);
             return taskRepository.save(task);
         }
         throw new NotFoundException("Task not found");
@@ -63,6 +62,23 @@ public class TaskService {
         } else {
             throw new NotFoundException("Task not found with id: " + id);
         }
+    }
+
+    public List<Task> filterTasks(String status, String priority, LocalDate due_date) throws NotFoundException {
+        List<Task> response = taskRepository.filterTasks(status, priority, due_date);
+        if(!response.isEmpty()){
+            return response;
+        }
+        throw new NotFoundException("So such task");
+
+    }
+
+    public List<Task> searchTasks(String keyword) throws NotFoundException {
+        List<Task> response = taskRepository.searchByTitleOrDescription(keyword);
+        if(!response.isEmpty()){
+            return response;
+        }
+        throw new NotFoundException("There is no such Task");
     }
 
 

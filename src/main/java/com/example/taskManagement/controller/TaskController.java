@@ -1,6 +1,7 @@
 package com.example.taskManagement.controller;
 
 import com.example.taskManagement.dtos.CreateTaskRequestDto;
+import com.example.taskManagement.dtos.FilterRequestDto;
 import com.example.taskManagement.exceptions.NotFoundException;
 import com.example.taskManagement.models.Task;
 import com.example.taskManagement.services.TaskService;
@@ -47,5 +48,17 @@ public class TaskController {
     public ResponseEntity<?> deleteTask(@PathVariable Long id) throws NotFoundException {
         taskService.deleteTask(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Task>> filterTasks(@RequestBody FilterRequestDto filterRequestDto) throws NotFoundException {
+        return new ResponseEntity<>(taskService.filterTasks(filterRequestDto.getStatus(),
+                filterRequestDto.getPriority(),
+                filterRequestDto.getDue_date()), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<Task>> searchTasks(@PathVariable String keyword) throws NotFoundException {
+        return new ResponseEntity<>(taskService.searchTasks(keyword), HttpStatus.OK);
     }
 }
