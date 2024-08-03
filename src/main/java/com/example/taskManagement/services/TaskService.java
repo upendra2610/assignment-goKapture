@@ -22,11 +22,14 @@ public class TaskService {
     }
 
     public List<Task> getAllTasks() throws NotFoundException {
+
         List<Task> response = taskRepository.findAll();
-        if(!response.isEmpty()){
-            return response;
+
+        if(response.isEmpty()){
+            throw new NotFoundException("There is no tasks");
         }
-        throw new NotFoundException("There is no tasks");
+        return response;
+
 
     }
 
